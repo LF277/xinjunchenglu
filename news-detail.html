@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无尽战场 - 新闻详情</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF4D4F',
+                        dark: '#111827',
+                        light: '#F9FAFB',
+                        accent: '#7C3AED'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Montserrat', 'system-ui', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://picsum.photos/id/142/1920/1080')",
+                        'feature-pattern': "linear-gradient(rgba(22, 93, 255, 0.1), rgba(22, 93, 255, 0.05))"
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .text-shadow-lg {
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+            }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .bg-glass {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="bg-dark text-light overflow-x-hidden">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold text-white flex items-center">
+                    <span class="text-primary mr-1"><i class="fa fa-gamepad"></i></span>
+                    无尽战场
+                </div>
+            </div>
+            
+            <!-- 桌面导航 -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-white hover:text-primary transition-colors">首页</a>
+                <a href="index.html#features" class="text-white hover:text-primary transition-colors">特色</a>
+                <a href="index.html#screenshots" class="text-white hover:text-primary transition-colors">截图</a>
+                <a href="index.html#download" class="text-white hover:text-primary transition-colors">下载</a>
+                <a href="news.html" class="text-white hover:text-primary transition-colors font-medium">新闻</a>
+            </div>
+            
+            <!-- 下载按钮 -->
+            <div class="hidden md:block">
+                <a href="index.html#download" class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-all transform hover:scale-105 shadow-lg hover:shadow-primary/30">
+                    立即下载
+                </a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-white focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark/95 backdrop-blur-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="index.html" class="text-white hover:text-primary transition-colors py-2">首页</a>
+                <a href="index.html#features" class="text-white hover:text-primary transition-colors py-2">特色</a>
+                <a href="index.html#screenshots" class="text-white hover:text-primary transition-colors py-2">截图</a>
+                <a href="index.html#download" class="text-white hover:text-primary transition-colors py-2">下载</a>
+                <a href="news.html" class="text-white hover:text-primary transition-colors py-2 font-medium">新闻</a>
+                <a href="index.html#download" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full transition-all text-center">
+                    立即下载
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 新闻详情页面 -->
+    <section class="pt-28 pb-20 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <!-- 返回按钮 -->
+            <div class="mb-8">
+                <a href="news.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors">
+                    <i class="fa fa-arrow-left mr-2"></i> 返回新闻列表
+                </a>
+            </div>
+            
+            <!-- 新闻内容 -->
+            <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden">
+                <!-- 新闻图片 -->
+                <div class="relative h-96 overflow-hidden">
+                    <img id="news-image" src="https://picsum.photos/id/237/1200/600" alt="新闻图片" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8">
+                        <span id="news-tag" class="bg-primary text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">
+                            最新资料片
+                        </span>
+                        <h1 id="news-title" class="text-3xl md:text-4xl font-bold text-white mb-2">全新资料片"暗影崛起"现已上线</h1>
+                        <div class="flex items-center text-gray-300">
+                            <span><i class="fa fa-calendar-o mr-1"></i> 2025年6月15日</span>
+                            <span class="mx-3">•</span>
+                            <span><i class="fa fa-user-o mr-1"></i> 开发团队</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新闻正文 -->
+                <div class="p-8">
+                    <div id="news-content" class="prose prose-invert max-w-none">
+                        <p>我们很高兴地宣布，《无尽战场》的全新资料片"暗影崛起"现已正式上线！这个备受期待的更新为游戏带来了一系列令人兴奋的新内容，包括全新区域、角色、任务和系统。</p>
+                        
+                        <h2>探索暗影世界</h2>
+                        <p>踏上未知的旅程，探索神秘的暗影世界。这个全新区域充满了危险和机遇，隐藏着无数秘密等待你去发现。暗影世界的地形复杂多变，有深邃的峡谷、黑暗的森林和神秘的废墟，每一处都有独特的挑战和奖励。</p>
+                        
+                        <div class="my-6 rounded-xl overflow-hidden">
+                            <img src="https://picsum.photos/id/1015/1200/600" alt="暗影世界" class="w-full h-auto rounded-xl">
+                        </div>
+                        
+                        <h2>全新职业：暗影猎手</h2>
+                        <p>新增的暗影猎手职业结合了速度、敏捷和暗影魔法，能够在战斗中灵活穿梭，给予敌人致命一击。暗影猎手可以使用双持武器，擅长近战爆发和远程狙击，同时还能利用暗影魔法进行隐身和控制。</p>
+                        
+                        <div class="my-6 grid grid-cols-2 gap-4">
+                            <div class="rounded-xl overflow-hidden">
+                                <img src="https://picsum.photos/id/1074/600/400" alt="暗影猎手" class="w-full h-auto rounded-xl">
+                            </div>
+                            <div class="rounded-xl overflow-hidden">
+                                <img src="https://picsum.photos/id/1079/600/400" alt="暗影技能" class="w-full h-auto rounded-xl">
+                            </div>
+                        </div>
+                        
+                        <h2>暗影副本与挑战</h2>
+                        <p>资料片中加入了全新的5人副本"暗影要塞"和团队副本"黑暗神殿"。这些副本充满了挑战性的BOSS战和丰厚的奖励，是玩家展示实力和获取顶级装备的好去处。此外，还新增了日常暗影任务和限时活动，让玩家可以不断挑战自我。</p>
+                        
+                        <h2>系统优化与调整</h2>
+                        <p>除了新内容，我们还对游戏进行了全面的优化和调整。包括：</p>
+                        <ul class="list-disc pl-5 my-4">
+                            <li>改进了游戏性能，提升了帧率和加载速度</li>
+                            <li>优化了战斗系统，增强了职业平衡</li>
+                            <li>增加了新的社交功能，方便玩家组队和交流</li>
+                            <li>改进了任务系统，提供更清晰的指引和奖励</li>
+                            <li>修复了已知的BUG和问题，提升了游戏稳定性</li>
+                        </ul>
+                        
+                        <h2>庆祝活动</h2>
+                        <p>为了庆祝资料片上线，我们准备了一系列精彩活动：</p>
+                        <ul class="list-disc pl-5 my-4">
+                            <li>上线首周，所有玩家登录即可获得"暗影崛起"专属称号</li>
+                            <li>连续登录7天，可获得限量版暗影坐骑</li>
+                            <li>参与暗影副本和活动，有机会获得珍稀道具和装备</li>
+                            <li>全服经验和掉落加成，助力快速升级</li>
+                        </ul>
+                        
+                        <p>立即登录游戏，体验全新资料片带来的精彩内容！如果你还没有加入《无尽战场》，现在正是最佳时机，创建你的角色，开启属于你的冒险之旅！</p>
+                    </div>
+                    
+                    <!-- 分享按钮 -->
+                    <div class="mt-12 pt-8 border-t border-gray-800">
+                        <div class="flex flex-wrap items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <span class="text-gray-400 mr-2">分享：</span>
+                                <a href="#" class="text-gray-400 hover:text-primary transition-colors mx-1">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-primary transition-colors mx-1">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-primary transition-colors mx-1">
+                                    <i class="fa fa-instagram"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-primary transition-colors mx-1">
+                                    <i class="fa fa-discord"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-primary transition-colors mx-1">
+                                    <i class="fa fa-link"></i>
+                                </a>
+                            </div>
+                            
+                            <div>
+                                <a href="news.html" class="inline-flex items-center px-4 py-2 bg-dark/50 hover:bg-dark/70 text-white rounded-lg transition-colors">
+                                    返回新闻列表 <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 相关新闻 -->
+            <div class="mt-16">
+                <h2 class="text-2xl font-bold text-white mb-8">相关新闻</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 相关新闻 1 -->
+                    <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                        <div class="relative h-40 overflow-hidden">
+                            <img src="https://picsum.photos/id/119/800/600" alt="平衡性更新" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-500 text-xs">2025年6月8日</span>
+                                <span class="bg-secondary text-white text-xs px-2 py-0.5 rounded-full">游戏更新</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">6月平衡性更新说明</h3>
+                            <a href="news-detail.html?id=2" class="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium">
+                                阅读更多 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- 相关新闻 2 -->
+                    <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                        <div class="relative h-40 overflow-hidden">
+                            <img src="https://picsum.photos/id/112/800/600" alt="新角色介绍" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-500 text-xs">2025年5月10日</span>
+                                <span class="bg-purple-500 text-white text-xs px-2 py-0.5 rounded-full">新内容</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">全新职业"暗影猎手"曝光</h3>
+                            <a href="news-detail.html?id=6" class="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium">
+                                阅读更多 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- 相关新闻 3 -->
+                    <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                        <div class="relative h-40 overflow-hidden">
+                            <img src="https://picsum.photos/id/133/800/600" alt="开发者日志" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-500 text-xs">2025年5月25日</span>
+                                <span class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">开发日志</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">开发日志：未来三个月的游戏路线图</h3>
+                            <a href="news-detail.html?id=4" class="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium">
+                                阅读更多 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
