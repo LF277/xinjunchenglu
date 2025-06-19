@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新君成录 - 新闻中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./img/favicon.ico" rel="icon" type="./img/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -28,25 +30,29 @@
                 }
             }
         }
-</script>
     </script>
     <style type="text/tailwindcss">
         @layer utilities {
             .content-auto {
                 content-visibility: auto;
             }
+
             .text-shadow {
                 text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
             }
+
             .text-shadow-lg {
                 text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
             }
+
             .animate-float {
                 animation: float 3s ease-in-out infinite;
             }
+
             .scrollbar-hide::-webkit-scrollbar {
                 display: none;
             }
+
             .bg-glass {
                 background: rgba(255, 255, 255, 0.1);
                 backdrop-filter: blur(10px);
@@ -54,12 +60,21 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
     </style>
 </head>
+
 <body class="bg-dark text-light overflow-x-hidden">
     <!-- 导航栏 -->
     <header id="navbar" class="fixed w-full z-50 transition-all duration-300">
@@ -70,7 +85,7 @@
                     新君成录
                 </div>
             </div>
-            
+
             <!-- 桌面导航 -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="index.html" class="text-white hover:text-primary transition-colors">首页</a>
@@ -79,14 +94,14 @@
                 <a href="index.html#download" class="text-white hover:text-primary transition-colors">下载</a>
                 <a href="news.html" class="text-white hover:text-primary transition-colors font-medium">新闻</a>
             </div>
-            
+
             <!-- 下载按钮 -->
             <div class="hidden md:block">
                 <a href="index.html#download" class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-all transform hover:scale-105 shadow-lg hover:shadow-primary/30">
                     立即下载
                 </a>
             </div>
-            
+
             <!-- 移动端菜单按钮 -->
             <div class="md:hidden">
                 <button id="menu-toggle" class="text-white focus:outline-none">
@@ -94,7 +109,7 @@
                 </button>
             </div>
         </nav>
-        
+
         <!-- 移动端菜单 -->
         <div id="mobile-menu" class="hidden md:hidden bg-dark/95 backdrop-blur-md">
             <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
@@ -117,30 +132,28 @@
                 <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold text-white mb-4">新闻中心</h1>
                 <p class="text-gray-400 max-w-2xl mx-auto">了解游戏的最新动态、更新内容和活动信息</p>
             </div>
-            
+
             <!-- 新闻分类筛选 -->
             <div class="flex flex-wrap justify-center gap-4 mb-12">
-                <button class="bg-primary text-white px-6 py-2 rounded-full transition-all">全部新闻</button>
-                <button class="bg-dark/50 hover:bg-dark/70 text-white px-6 py-2 rounded-full transition-all">游戏更新</button>
-                <button class="bg-dark/50 hover:bg-dark/70 text-white px-6 py-2 rounded-full transition-all">活动资讯</button>
-                <button class="bg-dark/50 hover:bg-dark/70 text-white px-6 py-2 rounded-full transition-all">赛事信息</button>
-                <button class="bg-dark/50 hover:bg-dark/70 text-white px-6 py-2 rounded-full transition-all">开发日志</button>
+                <button class="bg-primary text-white px-6 py-2 rounded-full transition-all" data-category="全部新闻">全部新闻</button>
+                <button class="bg-dark/50 hover:bg-dark/70 text-white px-6 py-2 rounded-full transition-all" data-category="游戏更新">游戏更新</button>
+                <button class="bg-dark/50 hover:bg-dark/70 text-white px-6 py-2 rounded-full transition-all" data-category="开发日志">开发日志</button>
             </div>
-            
+
             <!-- 搜索框 -->
             <div class="mb-12 max-w-2xl mx-auto">
                 <div class="relative">
-                    <input type="text" placeholder="搜索新闻..." class="w-full bg-dark/50 border border-gray-700 rounded-full py-3 px-6 pr-12 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <input type="text" id="search-input" placeholder="搜索新闻..." class="w-full bg-dark/50 border border-gray-700 rounded-full py-3 px-6 pr-12 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all">
+                    <button id="search-button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
             </div>
-            
+
             <!-- 新闻列表 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="news-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- 新闻卡片 1 -->
-                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group" data-category="最新资料片">
                     <div class="relative h-48 overflow-hidden">
                         <img src="https://picsum.photos/id/237/800/600" alt="新资料片发布" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-primary text-white text-sm px-3 py-1 rounded-full">
@@ -159,9 +172,9 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- 新闻卡片 2 -->
-                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group" data-category="游戏更新">
                     <div class="relative h-48 overflow-hidden">
                         <img src="https://picsum.photos/id/119/800/600" alt="平衡性更新" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-secondary text-white text-sm px-3 py-1 rounded-full">
@@ -180,30 +193,9 @@
                         </a>
                     </div>
                 </div>
-                
-                <!-- 新闻卡片 3 -->
-                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="https://picsum.photos/id/180/800/600" alt="竞技比赛" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-accent text-white text-sm px-3 py-1 rounded-full">
-                            赛事活动
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-gray-500 text-sm">2025年6月1日</span>
-                            <span class="text-gray-500 text-sm">运营团队</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">2025全球竞技大赛即将开始</h3>
-                        <p class="text-gray-400 mb-4 line-clamp-3">奖金池高达100万美元的全球竞技大赛即将开启，来自世界各地的顶尖玩家将展开激烈对决。</p>
-                        <a href="#" class="text-primary hover:text-primary/80 inline-flex items-center font-medium">
-                            阅读更多 <i class="fa fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
+
                 <!-- 新闻卡片 4 -->
-                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group" data-category="开发日志">
                     <div class="relative h-48 overflow-hidden">
                         <img src="https://picsum.photos/id/133/800/600" alt="开发者日志" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-green-500 text-white text-sm px-3 py-1 rounded-full">
@@ -222,30 +214,9 @@
                         </a>
                     </div>
                 </div>
-                
-                <!-- 新闻卡片 5 -->
-                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="https://picsum.photos/id/111/800/600" alt="新活动预告" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute top-4 left-4 bg-yellow-500 text-white text-sm px-3 py-1 rounded-full">
-                            活动资讯
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-gray-500 text-sm">2025年5月18日</span>
-                            <span class="text-gray-500 text-sm">运营团队</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">夏日狂欢活动即将开启</h3>
-                        <p class="text-gray-400 mb-4 line-clamp-3">参与限时活动，完成任务获取独特奖励，体验全新夏日主题内容，与好友一起享受游戏乐趣。</p>
-                        <a href="#" class="text-primary hover:text-primary/80 inline-flex items-center font-medium">
-                            阅读更多 <i class="fa fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
+
                 <!-- 新闻卡片 6 -->
-                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group" data-category="新内容">
                     <div class="relative h-48 overflow-hidden">
                         <img src="https://picsum.photos/id/112/800/600" alt="新角色介绍" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute top-4 left-4 bg-purple-500 text-white text-sm px-3 py-1 rounded-full">
@@ -265,63 +236,11 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- 特色新闻 -->
-            <div class="mt-20">
-                <h2 class="text-2xl font-bold text-white mb-8 text-center">本月热门</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- 特色新闻卡片 1 -->
-                    <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="https://picsum.photos/id/1025/1200/600" alt="游戏五周年庆典" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-6">
-                                <span class="bg-secondary text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">
-                                    重大活动
-                                </span>
-                                <h3 class="text-2xl font-bold text-white mb-2">游戏五周年庆典活动详情</h3>
-                                <p class="text-gray-300 mb-4">为期一个月的庆祝活动，包括独家奖励、限时内容和特别活动</p>
-                                <a href="#" class="text-white hover:text-primary transition-colors inline-flex items-center font-medium">
-                                    阅读更多 <i class="fa fa-arrow-right ml-2"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 特色新闻卡片 2 -->
-                    <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden group">
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="https://picsum.photos/id/1071/1200/600" alt="开发者访谈" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-6">
-                                <span class="bg-accent text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">
-                                    开发者访谈
-                                </span>
-                                <h3 class="text-2xl font-bold text-white mb-2">设计师访谈：未来的游戏发展方向</h3>
-                                <p class="text-gray-300 mb-4">开发团队分享了游戏的未来愿景和长期规划</p>
-                                <a href="#" class="text-white hover:text-primary transition-colors inline-flex items-center font-medium">
-                                    阅读更多 <i class="fa fa-arrow-right ml-2"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+
             <!-- 分页控件 -->
-            <div class="flex justify-center mt-16">
+            <div id="pagination" class="flex justify-center mt-16">
                 <nav class="flex items-center space-x-2">
-                    <a href="#" class="px-4 py-2 rounded-lg bg-dark/50 hover:bg-primary text-white transition-colors">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a href="#" class="px-4 py-2 rounded-lg bg-primary text-white">1</a>
-                    <a href="#" class="px-4 py-2 rounded-lg bg-dark/50 hover:bg-primary text-white transition-colors">2</a>
-                    <a href="#" class="px-4 py-2 rounded-lg bg-dark/50 hover:bg-primary text-white transition-colors">3</a>
-                    <span class="px-4 py-2 text-gray-400">...</span>
-                    <a href="#" class="px-4 py-2 rounded-lg bg-dark/50 hover:bg-primary text-white transition-colors">12</a>
-                    <a href="#" class="px-4 py-2 rounded-lg bg-dark/50 hover:bg-primary text-white transition-colors">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
+                    <!-- 分页按钮将动态生成 -->
                 </nav>
             </div>
         </div>
@@ -355,7 +274,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div>
                     <h4 class="text-lg font-bold text-white mb-4">游戏</h4>
                     <ul class="space-y-2">
@@ -366,7 +285,7 @@
                         <li><a href="#" class="text-gray-500 hover:text-primary transition-colors">更新日志</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h4 class="text-lg font-bold text-white mb-4">支持</h4>
                     <ul class="space-y-2">
@@ -377,7 +296,7 @@
                         <li><a href="#" class="text-gray-500 hover:text-primary transition-colors">退款政策</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h4 class="text-lg font-bold text-white mb-4">法律</h4>
                     <ul class="space-y-2">
@@ -389,7 +308,7 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2025 新君成录，保留所有权利.</p>
                 <div class="flex space-x-6">
@@ -411,29 +330,29 @@
                 navbar.classList.remove('bg-dark/90', 'backdrop-blur-md', 'shadow-lg');
             }
         });
-        
-        // 移动端菜单切换
-       const menuToggle = document.getElementById('menu-toggle');
-       const mobileMenu = document.getElementById('mobile-menu');
 
-        menuToggle.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
         });
-        
+
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
-                
+
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
                     });
-                    
+
                     // 如果是移动端，点击后关闭菜单
                     if (!mobileMenu.classList.contains('hidden')) {
                         mobileMenu.classList.add('hidden');
@@ -441,9 +360,27 @@
                 }
             });
         });
-        
+
         // 新闻分类筛选功能
         const categoryButtons = document.querySelectorAll('.flex-wrap button');
+        const newsList = document.getElementById('news-list');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const pagination = document.getElementById('pagination');
+
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let filteredNews = [];
+
+        function filterNews(category) {
+            const allNews = Array.from(newsList.children);
+            filteredNews = allNews.filter(news => {
+                const newsCategory = news.getAttribute('data-category');
+                return category === '全部新闻' || newsCategory === category;
+            });
+            showPage(currentPage);
+        }
+
         categoryButtons.forEach(button => {
             button.addEventListener('click', () => {
                 // 移除所有按钮的活跃状态
@@ -451,19 +388,98 @@
                     btn.classList.remove('bg-primary');
                     btn.classList.add('bg-dark/50', 'hover:bg-dark/70');
                 });
-                
+
                 // 设置当前按钮为活跃状态
                 button.classList.remove('bg-dark/50', 'hover:bg-dark/70');
                 button.classList.add('bg-primary');
-                
-                // 这里可以添加实际的筛选逻辑
-                const category = button.textContent.trim();
-                console.log(`筛选类别: ${category}`);
-                // 实际项目中，这里可以根据类别筛选新闻列表
+
+                const category = button.getAttribute('data-category');
+                filterNews(category);
             });
         });
-    
+
+        // 搜索功能
+        function searchNews(query) {
+            const allNews = Array.from(newsList.children);
+            filteredNews = allNews.filter(news => {
+                const title = news.querySelector('h3').textContent.toLowerCase();
+                const description = news.querySelector('p').textContent.toLowerCase();
+                return title.includes(query) || description.includes(query);
+            });
+            showPage(1);
+        }
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            searchNews(query);
+        });
+
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.toLowerCase().trim();
+                searchNews(query);
+            }
+        });
+
+        // 分页功能
+        function showPage(page) {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentNews = filteredNews.slice(startIndex, endIndex);
+
+            // 隐藏所有新闻
+            Array.from(newsList.children).forEach(news => {
+                news.style.display = 'none';
+            });
+
+            // 显示当前页的新闻
+            currentNews.forEach(news => {
+                news.style.display = 'block';
+            });
+
+            // 生成分页按钮
+            const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+            pagination.innerHTML = '';
+
+            if (page > 1) {
+                const prevButton = document.createElement('a');
+                prevButton.href = '#';
+                prevButton.classList.add('px-4', 'py-2', 'rounded-lg', 'bg-dark/50', 'hover:bg-primary', 'text-white', 'transition-colors');
+                prevButton.innerHTML = '<i class="fa fa-angle-left"></i>';
+                prevButton.addEventListener('click', () => {
+                    showPage(page - 1);
+                });
+                pagination.appendChild(prevButton);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('a');
+                pageButton.href = '#';
+                pageButton.classList.add('px-4', 'py-2', 'rounded-lg', 'bg-dark/50', 'hover:bg-primary', 'text-white', 'transition-colors');
+                pageButton.textContent = i;
+                if (i === page) {
+                    pageButton.classList.add('bg-primary');
+                }
+                pageButton.addEventListener('click', () => {
+                    showPage(i);
+                });
+                pagination.appendChild(pageButton);
+            }
+
+            if (page < totalPages) {
+                const nextButton = document.createElement('a');
+                nextButton.href = '#';
+                nextButton.classList.add('px-4', 'py-2', 'rounded-lg', 'bg-dark/50', 'hover:bg-primary', 'text-white', 'transition-colors');
+                nextButton.innerHTML = '<i class="fa fa-angle-right"></i>';
+                nextButton.addEventListener('click', () => {
+                    showPage(page + 1);
+                });
+                pagination.appendChild(nextButton);
+            }
+        }
+
+        // 初始化，显示全部新闻
+        filterNews('全部新闻');
     </script>
 </body>
 </html>
-    
